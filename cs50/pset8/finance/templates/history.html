@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Trading History
+{% endblock %}
+
+{% block main %}
+    <table class="table table-hover">
+        <thead>
+            <th>Date</th>
+            <th>Action</th>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% if history|length %}
+            {% else %}
+                <tr>
+                    <td colspan="7">There is currently no history to display. Start trading!</td>
+                </tr>
+            {% endif %}
+            {% for entry in history %}
+                <tr>
+                    <td>{{ times[entry.timestamp] }}</td>
+                    {% if entry.amount > 0 %}
+                    <td>BUY</td>
+                    {% elif entry.amount < 0 %}
+                    <td>SELL</td>
+                    {% endif %}
+                    <td>{{ entry.symbol }}</td>
+                    <td>{{ lookup_values[entry.symbol]["name"] }}</td>
+                    <td>{{ entry.amount }}</td>
+                    <td>{{ entry.price | usd }}</td>
+                    <td>{{ (entry.price * entry.amount) | usd }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

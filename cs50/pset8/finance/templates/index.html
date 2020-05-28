@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock overview
+{% endblock %}
+
+{% block main %}
+    <table class="table table-hover">
+        <thead>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% if stocks|length %}
+            {% else %}
+                <tr>
+                    <td colspan="5">You currently do not have any stock. Why not invest?</td>
+                </tr>
+            {% endif %}
+            {% for stock in stocks %}
+                <tr>
+                    <td>{{ stock.symbol }}</td>
+                    <td>{{ lookup_values[stock.symbol]["name"] }}</td>
+                    <td>{{ stock.amount }}</td>
+                    <td>{{ lookup_values[stock.symbol]["price"] | usd }}</td>
+                    <td>{{ (lookup_values[stock.symbol]["price"] * stock.amount) | usd }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="text-align: right;">
+                    <b>Balance</b>
+                </td>
+                <td>
+                    {{ cash | usd }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right;">
+                    <b>Grand total</b>
+                </td>
+                <td>
+                    {{ total | usd }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}
